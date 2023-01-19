@@ -1,73 +1,85 @@
-@extends('layouts.app')
+<!DOCTYPE html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
-@section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{ __('Login') }}</div>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="description" content="Laravel_Test">
+    <link rel="icon" href="{{asset('img/user.png')}}">
 
-                <div class="card-body">
-                    <form method="POST" action="{{ route('login') }}">
-                        @csrf
+    <title>Laravel Test| Admin Login Portal</title>
+    @include('layouts.css')
 
-                        <div class="row mb-3">
-                            <label for="email" class="col-md-4 col-form-label text-md-end">{{ __('E-Mail Address') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
-
-                                @error('email')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="row mb-3">
-                            <label for="password" class="col-md-4 col-form-label text-md-end">{{ __('Password') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password">
-
-                                @error('password')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="row mb-3">
-                            <div class="col-md-6 offset-md-4">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
-
-                                    <label class="form-check-label" for="remember">
-                                        {{ __('Remember Me') }}
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row mb-0">
-                            <div class="col-md-8 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
-                                    {{ __('Login') }}
-                                </button>
-
-                                @if (Route::has('password.request'))
-                                    <a class="btn btn-link" href="{{ route('password.request') }}">
-                                        {{ __('Forgot Your Password?') }}
-                                    </a>
-                                @endif
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
+</head>
+<body class="hold-transition login-page">
+<div class="login-box">
+  <div class="login-logo">
+    {{-- <img src="{{URL::to($site->logo)}}" height="100" width="100"> --}}
+    <img src="{{asset('img/user.png')}}" height="100" width="100">
+  </div>
+  <!-- /.login-logo -->
+  <div class="login-box-body">
+    <p class="login-box-msg">Admin Login Portal</p>
+    @if(Session::has('error'))
+    <div class="col-md-12">
+        <div class="alert alert-danger no-b">
+            <span class="text-semibold"></span> {{ Session::get('error')}}
+            <button type="button" class="close" data-dismiss="alert"><span>×</span></button>
         </div>
     </div>
+    @endif
+@if(Session::has('success'))
+<div class="col-md-12">
+    <div class="alert alert-success no-b">
+        <span class="text-semibold"></span> {{ Session::get('success')}}
+        <button type="button" class="close" data-dismiss="alert"><span>×</span></button>
+    </div>
 </div>
-@endsection
+@endif
+@if ($errors->any())
+<div class="alert alert-danger">
+    <ul>
+        @foreach ($errors->all() as $error)
+            <li>{{ $error }}</li>
+        @endforeach
+    </ul>
+</div><br />
+@endif
+    <form action="{{ route('login') }}" method="post" class="form-element">
+        @csrf
+      <div class="form-group has-feedback">
+        <input type="email" class="form-control" placeholder="Email" name="email" required>
+        <span class="ion ion-email form-control-feedback"></span>
+      </div>
+      <div class="form-group has-feedback">
+        <input type="password" class="form-control" placeholder="Password" name="password" required>
+        <span class="ion ion-locked form-control-feedback"></span>
+      </div>
+      <div class="row">
+        <div class="col-xs-6">
+          <div class="checkbox">
+            <input type="checkbox" id="basic_checkbox_1" name="remember">
+			<label for="basic_checkbox_1">Remember Me</label>
+          </div>
+        </div>
+
+        <!-- /.col -->
+        <div class="col-xs-12 text-center">
+          <button type="submit" class="btn btn-info btn-block btn-flat margin-top-10">SIGN IN</button>
+        </div>
+        <!-- /.col -->
+      </div>
+    </form>
+
+
+  </div>
+  <!-- /.login-box-body -->
+</div>
+<!-- /.login-box -->
+
+@include('layouts.js')
+
+</body>
+</html>

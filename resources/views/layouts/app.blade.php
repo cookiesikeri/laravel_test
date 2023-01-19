@@ -1,83 +1,100 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+
 <head>
     <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="description" content="Laravel_Test">
+    <link rel="icon" href="">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>Laravel Test | @yield('title')</title>
 
-    <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}" defer></script>
+    @include('layouts.css')
+    @yield('css')
 
-    <!-- Fonts -->
-    <link rel="dns-prefetch" href="//fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
 
-    <!-- Styles -->
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-</head>
-<body>
-    <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
-            <div class="container">
-                <a class="navbar-brand" href="{{ url('/') }}">
-                    {{ config('app.name', 'Laravel') }}
-                </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
+  </head>
 
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <!-- Left Side Of Navbar -->
-                    <ul class="navbar-nav me-auto">
+<body class="hold-transition skin-blue sidebar-mini">
+<div class="wrapper">
 
-                    </ul>
+    @include('layouts.top-nav')
+  <!-- Left side column. contains the logo and sidebar -->
+  <aside class="main-sidebar">
+    <!-- sidebar-->
+    <section class="sidebar">
+      <!-- Sidebar user panel -->
+      <div class="user-panel">
+        <div class="image">
+          <img src="{{ Auth::user()->image}}" class="img-circle" alt="User Image">
+        </div>
+        <div class="info">
+          <p> {{ucfirst(Auth::User()->name)}}</p>
+          <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+        </div>
+      </div>
 
-                    <!-- Right Side Of Navbar -->
-                    <ul class="navbar-nav ms-auto">
-                        <!-- Authentication Links -->
-                        @guest
-                            @if (Route::has('login'))
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-                                </li>
-                            @endif
+      <!-- sidebar menu-->
+      @include('layouts.sidebar')
+    </section>
+    <!-- /.sidebar -->
+    <div class="sidebar-footer">
+		<!-- item-->
+		<a href="" class="link" data-toggle="tooltip" title="" data-original-title="Settings"><i class="fa fa-cog fa-spin"></i></a>
+		<!-- item-->
+		<a href="" class="link" data-toggle="tooltip" title="" data-original-title="Messages"><i class="fa fa-envelope"></i></a>
+		<!-- item-->
+		<a href="{{route('logout')}}" class="link" data-toggle="tooltip" title="" data-original-title="Logout"><i class="fa fa-power-off"></i></a>
+	</div>
+  </aside>
 
-                            @if (Route::has('register'))
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-                                </li>
-                            @endif
-                        @else
-                            <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    {{ Auth::user()->name }}
-                                </a>
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
 
-                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{{ route('logout') }}"
-                                       onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
-                                    </a>
 
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                        @csrf
-                                    </form>
-                                </div>
-                            </li>
-                        @endguest
-                    </ul>
-                </div>
-            </div>
-        </nav>
+    <!-- Main content -->
+    @yield('content')
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+  @include('layouts.footer')
 
-        <main class="py-4">
-            @yield('content')
-        </main>
-    </div>
+</div>
+<!-- ./wrapper -->
+
+
+@include('layouts.js')
+<script>
+    @if(Session::has('success'))
+    new Noty({
+        type: 'success',
+        layout: 'topRight',
+        text: '{{Session::get('success')}}'
+    }).show();
+    @endif
+
+    @if(Session::has('fail'))
+    new Noty({
+        type: 'error',
+        layout: 'topRight',
+        text: '{{Session::get('fail')}}'
+    }).show();
+    @endif
+
+    @if(Session::has('error'))
+    new Noty({
+        type: 'error',
+        layout: 'topRight',
+        text: '{{Session::get('error')}}'
+    }).show();
+    @endif
+
+</script>
+@yield('javascripts')
+
+
 </body>
 </html>
